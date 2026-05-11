@@ -246,7 +246,8 @@
             return;
         }
         
-        // --- НОВАЯ ЧАСТЬ: отправка на сервер ---
+         // --- НОВАЯ ЧАСТЬ: отправка на сервер (с улучшенной отладкой) ---
+        console.log('1. Начинаю отправку...'); // Сообщение в консоль
         try {
             const response = await fetch('/submit-form', {
                 method: 'POST',
@@ -255,17 +256,21 @@
                 },
                 body: JSON.stringify({ name, phone })
             });
-            
+            console.log('2. Ответ получен, статус:', response.status); // Логируем статус ответа (200, 404...)
+
             const result = await response.json();
-            
+            console.log('3. Данные от сервера получены:', result); // Логируем то, что сказал сервер
+
             if(result.success) {
+                console.log('4. Успех! Показываем сообщение.'); // Логируем ветку успеха
                 showMessage(result.message, 'green');
                 document.getElementById('leadForm').reset();
             } else {
+                console.log('4. Сервер вернул success: false'); // Логируем ветку ошибки
                 showMessage('Ошибка при отправке. Попробуйте позже.', 'red');
             }
         } catch(error) {
-            console.error('Ошибка:', error);
+            console.error('5. Поймана ошибка!', error); // Логируем ошибку сети или кода
             showMessage('Не удалось отправить заявку. Проверьте соединение.', 'red');
         }
         
